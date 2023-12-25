@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Mobile-Programming-Project</string>
+    <string name="available_balance">390.000</string>
+    <string name="available_balance_text">Available Balance (Rp)</string>
+    <string name="spent_rp_text">Spent (Rp)</string>
+    <string name="spent_rp_number">860.000</string>
+    <string name="earned_rp_number">1.250.000</string>
+    <string name="earned_rp_text">Earned (Rp)</string>
+    <string name="more_details">More Details</string>
+    <string name="top_spent_category">You spent Rp500.000 on shopping this month!</string>
+    <string name="expenses_overview">Expenses Overview</string>
+    <string name="view_budget_plan">View Budget Plan</string>
 </resources>

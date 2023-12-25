@@ -1,18 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@color/background">
 
-    <TextView
+
+    <ScrollView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:background="@drawable/gradient_main_screen_blue"
+
+                android:paddingVertical="100dp"
+                android:paddingStart="30dp"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/availableBalanceNumberTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/available_balance"
+                    android:textSize="48sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white">
+                </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/available_balance_text"
+                    android:textSize="15sp"
+                    android:textColor="@color/white">
+                </TextView>
+
+            </LinearLayout>
+
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginTop="-68dp"
+                android:background="@drawable/rounded_corners_main_screen"
+                >
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_margin="10dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginStart="20dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/earned_rp_text"
+                            android:textSize="11sp"
+                            android:textColor="@color/white80">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/earnedNumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/earned_rp_number"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:textSize="24sp"
+                            app:drawableStartCompat="@drawable/round_small_main_screen"
+                            app:drawableTint="@color/greenearned"
+                            android:drawablePadding="10dp">
+                        </TextView>
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="20dp"
+                        >
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/spent_rp_text"
+                            android:textColor="@color/white80"
+                            android:textSize="11sp">
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/spentNumberTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/spent_rp_number"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            app:drawableStartCompat="@drawable/round_small_main_screen"
+                            android:drawablePadding="10dp"
+                            app:drawableTint="@color/redspent">
+                        </TextView>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1.5dp"
+                    android:background="@color/grey">
+                </View>
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/topSpentCategoryTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/top_spent_category"
+                    android:textColor="@color/white"
+                    android:textSize="13sp">
+                </TextView>
+
+                <Button
+                    android:id="@+id/moreDetailsButton"
+                    android:layout_margin="15dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/bottomblue"
+                    android:text="@string/more_details"
+                    android:textColor="@color/white"
+                    android:background="@drawable/rounded_corners_main_screen"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="17sp">
+                </Button>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_margin="30dp"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/expenses_overview"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white">
+            </TextView>
+
+            <!-- TO DO ADD THING: CHART -->
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            </ListView>
+
+            <Button
+                android:layout_gravity="center"
+                android:paddingHorizontal="80dp"
+                android:id="@+id/budgetPlanButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/view_budget_plan"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_corners_main_screen"
+                android:backgroundTint="@color/bottomblue"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="17sp">
+            </Button>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background">#2D2D2D</color>
+    <color name="topblue">#127FFF</color>
+    <color name="bottomblue">#34B6FF</color>
+    <color name="white80">#CCFFFFFF</color>
+    <color name="redspent">#FF5141</color>
+    <color name="greenearned">#00D83C</color>
+    <color name="grey">#33D8D8D8</color>
 </resources>
