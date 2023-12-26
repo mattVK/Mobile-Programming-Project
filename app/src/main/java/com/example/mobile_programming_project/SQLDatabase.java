@@ -47,18 +47,18 @@ public class SQLDatabase extends SQLiteOpenHelper {
         String queryBudgetCategory = "CREATE TABLE " + TABLE_NAME_BUDGET_CATEGORIES + " ( " +
                                      COLUMN_CATEGORY_BUDGET_CATEGORIES + " TEXT PRIMARY KEY);";
 
-        String querySpentCategory = "CREATE TABLE " + TABLE_NAME_BUDGET_CATEGORIES + " ( " +
+        String querySpentCategory = "CREATE TABLE " + TABLE_NAME_SPENT_CATEGORIES + " ( " +
                 COLUMN_CATEGORY_SPENT_CATEGORIES + " TEXT PRIMARY KEY);";
 
         String queryBudget = "CREATE TABLE " + TABLE_NAME_BUDGET_TRANSACTIONS + " ( " +
                         COLUMN_ID_BUDGET_TRANSACTIONS + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_AMOUNT_BUDGET_TRANSACTIONS + " REAL, " +
+                        COLUMN_AMOUNT_BUDGET_TRANSACTIONS + " INTEGER, " +
                         COLUMN_DATE_BUDGET_TRANSACTIONS + " DATE, " +
                         COLUMN_CATEGORY_BUDGET_TRANSACTIONS + " TEXT, " +
                         "FOREIGN KEY ("+ COLUMN_CATEGORY_BUDGET_TRANSACTIONS + ")" + " REFERENCES " + TABLE_NAME_BUDGET_CATEGORIES + "(" + COLUMN_CATEGORY_BUDGET_CATEGORIES + "));";
         String querySpent = " CREATE TABLE " + TABLE_NAME_SPENT_TRANSACTIONS + " ( " +
                         COLUMN_ID_SPENT_TRANSACTIONS + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        COLUMN_AMOUNT_SPENT_TRANSACTIONS + " REAL, " +
+                        COLUMN_AMOUNT_SPENT_TRANSACTIONS + " INTEGER, " +
                         COLUMN_DATE_SPENT_TRANSACTIONS + " DATE, " +
                         COLUMN_CATEGORY_SPENT_TRANSACTIONS + " TEXT, " +
                         "FOREIGN KEY ("+ COLUMN_CATEGORY_SPENT_TRANSACTIONS + ")" + " REFERENCES " + TABLE_NAME_SPENT_CATEGORIES + "(" + COLUMN_CATEGORY_SPENT_CATEGORIES + "));";
@@ -68,19 +68,48 @@ public class SQLDatabase extends SQLiteOpenHelper {
         db.execSQL(queryBudget);
         db.execSQL(querySpent);
 
+        //set initial values for categories
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Groceries");
+        db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Shopping");
+        db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Food & Drinks");
+        db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Transportation");
+        db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
+        cv.clear();
+
+
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        super.onConfigure(db);
+        db.execSQL("PRAGMA foreign_keys = ON;");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BUDGET_CATEGORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_SPENT_CATEGORIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_BUDGET_TRANSACTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_SPENT_TRANSACTIONS);
+
 
         onCreate(db);
     }
 
 
     //add budget transactions by calling this. (date format: YYYY-MM-DD)
-    void addBudgetTransactions(double amount, String date, String category){
+    void addBudgetTransactions(int amount, String date, String category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -97,7 +126,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
     }
 
     //add spent transactions by calling this. (date format: YYYY-MM-DD)
-    void addSpentTransactions(double amount, String date, String category){
+    void addSpentTransactions(int amount, String date, String category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -115,8 +144,21 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
 
     //sum of categories for main screen.
-    Cursor getAllSumOfSpentCategories(){
-        String query = "SELECT SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS  + ") FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+    Cursor getSumOfSpentCategories(){
+        String query = "SELECT SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS  + ") FROM " + TABLE_NAME_SPENT_TRANSACTIONS;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    //sum of categories grouped for main screen.
+
+    Cursor getSumOfSpentCategoriesByCategory(){
+        String query = "SELECT "+ COLUMN_CATEGORY_SPENT_TRANSACTIONS+"," +"SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS  + ")" + ", COUNT(*) " + "FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
                        " GROUP BY " + COLUMN_CATEGORY_SPENT_TRANSACTIONS;
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -126,6 +168,9 @@ public class SQLDatabase extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+
+
 
 
 

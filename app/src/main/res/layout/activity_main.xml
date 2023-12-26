@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/available_balance"
                     android:textSize="48sp"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/dmsansbold"
                     android:textColor="@color/white">
                 </TextView>
 
@@ -43,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/available_balance_text"
                     android:textSize="15sp"
+                    android:fontFamily="@font/dmsansregular"
                     android:textColor="@color/white">
                 </TextView>
 
@@ -52,7 +53,7 @@
 
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_gravity="center"
@@ -65,7 +66,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_margin="10dp">
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -77,6 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/earned_rp_text"
+                            android:fontFamily="@font/dmsansregular"
                             android:textSize="11sp"
                             android:textColor="@color/white80">
                         </TextView>
@@ -86,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/earned_rp_number"
-                            android:textStyle="bold"
+                            android:fontFamily="@font/dmsansbold"
                             android:textColor="@color/white"
                             android:textSize="24sp"
                             app:drawableStartCompat="@drawable/round_small_main_screen"
@@ -107,6 +110,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/spent_rp_text"
+                            android:fontFamily="@font/dmsansregular"
                             android:textColor="@color/white80"
                             android:textSize="11sp">
                         </TextView>
@@ -117,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/spent_rp_number"
                             android:textSize="24sp"
-                            android:textStyle="bold"
+                            android:fontFamily="@font/dmsansbold"
                             android:textColor="@color/white"
                             app:drawableStartCompat="@drawable/round_small_main_screen"
                             android:drawablePadding="10dp"
@@ -141,6 +145,7 @@
                     android:layout_gravity="center"
                     android:text="@string/top_spent_category"
                     android:textColor="@color/white"
+                    android:fontFamily="@font/dmsansregular"
                     android:textSize="13sp">
                 </TextView>
 
@@ -154,7 +159,7 @@
                     android:textColor="@color/white"
                     android:background="@drawable/rounded_corners_main_screen"
                     android:textAllCaps="false"
-                    android:textStyle="bold"
+                    android:fontFamily="@font/dmsansbold"
                     android:textSize="17sp">
                 </Button>
 
@@ -166,8 +171,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/expenses_overview"
+                android:fontFamily="@font/dmsansbold"
                 android:textSize="18sp"
-                android:textStyle="bold"
                 android:textColor="@color/white">
             </TextView>
 
@@ -176,7 +181,7 @@
             <ListView
                 android:id="@+id/sumCategoriesListView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="400dp"
                 android:isScrollContainer="false">
             </ListView>
 
@@ -191,8 +196,10 @@
                 android:background="@drawable/rounded_corners_main_screen"
                 android:backgroundTint="@color/bottomblue"
                 android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="17sp">
+                android:fontFamily="@font/dmsansbold"
+
+                android:textSize="17sp"
+                >
             </Button>
 
 
