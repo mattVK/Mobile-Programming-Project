@@ -155,6 +155,17 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    Cursor getSumOfBudgetCategories(){
+        String query = "SELECT SUM(" + COLUMN_AMOUNT_BUDGET_TRANSACTIONS  + ") FROM " + TABLE_NAME_BUDGET_TRANSACTIONS;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
     //sum of categories grouped for main screen.
 
     Cursor getSumOfSpentCategoriesByCategory(){

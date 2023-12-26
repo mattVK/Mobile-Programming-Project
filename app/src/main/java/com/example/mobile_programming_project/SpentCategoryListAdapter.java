@@ -18,13 +18,14 @@ import java.util.Objects;
 public class SpentCategoryListAdapter extends BaseAdapter {
 
     private Context context;
-    private int sumOfAllCategories;
+    private int sumOfAllSpentCategories;
+
     private List<String[]> dataList;
 
     public SpentCategoryListAdapter(Context context, List<String[]> dataList, int sumOfAllCategories){
         this.context = context;
         this.dataList = dataList;
-        this.sumOfAllCategories = sumOfAllCategories;
+        this.sumOfAllSpentCategories = sumOfAllCategories;
     }
 
     @Override
@@ -59,8 +60,8 @@ public class SpentCategoryListAdapter extends BaseAdapter {
         categoryTextView.setText(dataList.get(position)[0]);
         numberOfTransactionsTextView.setText(dataList.get(position)[2]);
         int percentOfCategory;
-        if (sumOfAllCategories != 0) {
-            percentOfCategory = (Integer.parseInt(dataList.get(position)[1]) * 100) / sumOfAllCategories;
+        if (sumOfAllSpentCategories != 0) {
+            percentOfCategory = (Integer.parseInt(dataList.get(position)[1]) * 100) / sumOfAllSpentCategories;
         } else {
             percentOfCategory = 0;
         }

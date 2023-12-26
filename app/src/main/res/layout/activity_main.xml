@@ -177,6 +177,12 @@
             </TextView>
 
             <!-- TO DO ADD THING: CHART -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pieChartMainScreen"
+                android:layout_width="200dp"
+                android:layout_gravity="center"
+                android:layout_height="200dp">
+            </com.github.mikephil.charting.charts.PieChart>
 
             <ListView
                 android:id="@+id/sumCategoriesListView"

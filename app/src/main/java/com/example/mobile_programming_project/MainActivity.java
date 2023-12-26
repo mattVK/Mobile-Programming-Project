@@ -5,12 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -25,12 +33,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     List<String[]> dataList;
-    int sumOfAll;
+    int sumOfAllSpent;
+
+    int sumOfAllBudget;
 
     Button moreDetailsButton, viewBudgetPlanButton;
-    TextView spentTextView;
+    TextView spentTextView, budgetTextView, availableBalanceNumberTextView, topSpentTextView;
 
     ListView sumCategoriesListView;
+
+    PieChart pieChartMain;
+
+    int[] colorArray = new int[]{0xFF2DAAFF, 0xFFFFBA01, 0x2FF9E45D, 0xFF57B0E1};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         spentTextView = findViewById(R.id.spentNumberTextView);
         viewBudgetPlanButton = findViewById(R.id.budgetPlanButton);
         sumCategoriesListView = findViewById(R.id.sumCategoriesListView);
+        budgetTextView = findViewById(R.id.earnedNumberTextView);
+        availableBalanceNumberTextView = findViewById(R.id.availableBalanceNumberTextView);
+        topSpentTextView = findViewById(R.id.topSpentCategoryTextView);
+        pieChartMain = findViewById(R.id.pieChartMainScreen);
 
         moreDetailsButton.setOnClickListener(new View.OnClickListener(){
             SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
@@ -68,18 +86,50 @@ public class MainActivity extends AppCompatActivity {
 
         dataList = new ArrayList<String[]>();
         getSumOfSpent();
-        getSumOfSpentDividedIntoCategories();
+        getSumOfBudget();
+        int databaseFlag = getSumOfSpentDividedIntoCategories();
+
+        availableBalanceNumberTextView.setText(formatInteger(sumOfAllBudget - sumOfAllSpent));
+
+        if (databaseFlag != -1) {
+            ArrayList<PieEntry> entries = new ArrayList<>();
+            pieChartMain.setVisibility(View.VISIBLE);
+
+            dataList.sort(new SumComparator());
+
+            for (int i = 0; i < dataList.size(); i++){
+                entries.add(new PieEntry(Integer.parseInt(dataList.get(i)[1]), dataList.get(i)[0]));
+            }
+
+            PieDataSet pieDataSet = new PieDataSet(entries, " ");
+            pieDataSet.setColors(colorArray);
+            pieDataSet.setDrawValues(false);
+
+            PieData pieData = new PieData(pieDataSet);
+
+            pieChartMain.setData(pieData);
+            pieChartMain.invalidate();
+            pieChartMain.getDescription().setEnabled(false);
+            pieChartMain.getLegend().setEnabled(false);
+            pieChartMain.setCenterTextColor(R.color.white);
+            pieChartMain.setHoleColor(0xFF2D2D2D);
+            pieChartMain.setTransparentCircleAlpha(0);
 
 
 
-        dataList.sort(new SumComparator());
 
-        Log.e("DATALIST", Arrays.toString(dataList.get(0)));
+            topSpentTextView.setText(String.format("You spent %s on %s this month!", dataList.get(0)[1], dataList.get(0)[0]));
+            Log.e("DATALIST", Arrays.toString(dataList.get(0)));
 
-        SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAll);
+            SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAllSpent);
 
 
-        sumCategoriesListView.setAdapter(adapter);
+            sumCategoriesListView.setAdapter(adapter);
+        }
+        else{
+            pieChartMain.setVisibility(View.INVISIBLE);
+        }
+
 
 
     }
@@ -90,26 +140,46 @@ public class MainActivity extends AppCompatActivity {
 
         if (cursor.getCount() == 0){
             spentTextView.setText("0");
+            sumOfAllSpent = 0;
         }else{
             while(cursor.moveToNext()){
-                sumOfAll = cursor.getInt(0);
+                sumOfAllSpent = cursor.getInt(0);
                 spentTextView.setText(formatInteger(cursor.getInt(0)));
             }
         }
 
     }
 
-    void getSumOfSpentDividedIntoCategories(){
+    void getSumOfBudget(){
+        SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
+        Cursor cursor = transactionsDB.getSumOfBudgetCategories();
+
+        if (cursor.getCount() == 0){
+            budgetTextView.setText("0");
+            sumOfAllBudget = 0;
+        }else{
+            while(cursor.moveToNext()){
+                sumOfAllBudget = cursor.getInt(0);
+                budgetTextView.setText(formatInteger(cursor.getInt(0)));
+            }
+        }
+
+    }
+
+    int getSumOfSpentDividedIntoCategories(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
         Cursor cursor = transactionsDB.getSumOfSpentCategoriesByCategory();
         if (cursor.getCount() == 0){
-
+            sumCategoriesListView.setVisibility(View.INVISIBLE);
+            return -1;
         }else{
             while(cursor.moveToNext()){
+                sumCategoriesListView.setVisibility(View.VISIBLE);
                 String[] temp = {cursor.getString(0), String.valueOf(cursor.getInt(1)), String.valueOf(cursor.getInt(2))};
                 dataList.add(temp);
             }
         }
+        return 1;
     }
 
 

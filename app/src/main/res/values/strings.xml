@@ -7,7 +7,7 @@
     <string name="earned_rp_number">1.250.000</string>
     <string name="earned_rp_text">Earned (Rp)</string>
     <string name="more_details">More Details</string>
-    <string name="top_spent_category">You spent Rp500.000 on shopping this month!</string>
+    <string name="top_spent_category">You haven\'t spent yet.</string>
     <string name="expenses_overview">Expenses Overview</string>
     <string name="view_budget_plan">View Budget Plan</string>
 </resources>
