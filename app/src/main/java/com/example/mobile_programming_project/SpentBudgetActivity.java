@@ -2,14 +2,18 @@ package com.example.mobile_programming_project;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,10 +21,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class SpentBudgetActivity extends AppCompatActivity {
-    private DatePickerDialog pickerDialog;
+
     private Button dateBtn;
     Spinner spn;
     Button saveBtn;
+
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,24 +37,12 @@ public class SpentBudgetActivity extends AppCompatActivity {
         dateBtn.setText(getTodayDate());
         saveBtn = findViewById(R.id.saveButton);
         spn = findViewById(R.id.spinner);
-        spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> AdapterView, View view, int position, long id) {
-                String item = AdapterView.getItemAtPosition(position).toString();
-            }
+        editText = findViewById(R.id.editTextPhone);
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         ArrayList<String> arrList = new ArrayList<>();
-        arrList.add("");
-        arrList.add("Groceries");
-        arrList.add("");
-        arrList.add("");
-        arrList.add("");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrList);
+        getAllSpentCategories(arrList);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_color_spinner, arrList);
         adapter.setDropDownViewResource(R.layout.dropdown_color_spinner);
         spn.setAdapter(adapter);
 
@@ -56,7 +50,33 @@ public class SpentBudgetActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SpentBudgetActivity.this, MainActivity.class);
-                startActivity(intent);
+                AlertDialog dialog = new AlertDialog.Builder(SpentBudgetActivity.this)
+                        .setTitle("Warning!")
+                        .setMessage("Are You Sure with your choice?")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                if (spn.getSelectedItem() == "Category" || editText.getText().toString().trim().equals("")){
+                                    dialog.dismiss();
+
+                                }else{
+//                                Toast.makeText(AddBudgetActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SpentBudgetActivity.this, dateBtn.getText(), Toast.LENGTH_SHORT).show();
+                                    addSpentTransaction();
+//                                startActivity(intent);
+                                }
+
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }).show();
             }
         });
     }
@@ -70,22 +90,21 @@ public class SpentBudgetActivity extends AppCompatActivity {
         return MakeDateString(day, month, year);
     }
 
-    private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener DateListener = new DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog initDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month+1;
-                String date = MakeDateString(day, month, year);
-                dateBtn.setText(date);
+            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                dateBtn.setText(MakeDateString(selectedDay, selectedMonth + 1, selectedYear));
             }
-        };
-        Calendar cdr = Calendar.getInstance();
-        int day = cdr.get(Calendar.DAY_OF_MONTH);
-        int month = cdr.get(Calendar.MONTH);
-        int year = cdr.get(Calendar.YEAR);
+        }, year, month, day);
 
-        int style = AlertDialog.THEME_HOLO_DARK;
-        pickerDialog = new DatePickerDialog(this, style, DateListener, day, month, year);
+        return datePickerDialog;
+
+
     }
 
     private String MakeDateString(int day, int month, int year) {
@@ -133,8 +152,31 @@ public class SpentBudgetActivity extends AppCompatActivity {
     }
     public void openDatePicker(View view) {
 
-        pickerDialog.show();
+        initDatePicker().show();
     }
 
+
+    void getAllSpentCategories(ArrayList<String> populateData){
+        SQLDatabase transactionsDB = new SQLDatabase(SpentBudgetActivity.this);
+        Cursor cursor = transactionsDB.getAllSpentCategories();
+        if (cursor.getCount() == 0){
+            spn.setVisibility(View.INVISIBLE);
+        }
+        else{
+            while(cursor.moveToNext()){
+                populateData.add(cursor.getString(0));
+            }
+        }
+
+    }
+
+    void addSpentTransaction(){
+        SQLDatabase transactionsDB = new SQLDatabase(SpentBudgetActivity.this);
+        transactionsDB.addSpentTransactions(Integer.parseInt(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString().trim());
+    }
+    String formatDateForDB(String date){
+        String[] formatDate = date.split("/");
+        return formatDate[2] + "-" + formatDate[1] + "-" + formatDate[0];
+    }
 }
 

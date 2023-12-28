@@ -41,6 +41,8 @@
         android:layout_marginTop="35dp"
         android:layout_marginEnd="93dp"
         android:text="Date"
+        android:textSize="17sp"
+        android:fontFamily="@font/dmsansbold"
         android:drawableRight="@drawable/calender_icon"
         android:textColor="@color/white"
         android:background="@drawable/rounded_corners_main_screen"

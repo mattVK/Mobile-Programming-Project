@@ -9,6 +9,25 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.util.Date;
+
+
+class Transaction{
+
+    Transaction(String transactionType, int id, int amount, String date, String category){
+        this.transactionType = transactionType;
+        this.id = id;
+        this.amount = amount;
+        this.date = date;
+        this.category = category;
+    }
+    String transactionType;
+    int id;
+    int amount;
+    String date;
+    String category;
+}
+
 public class SQLDatabase extends SQLiteOpenHelper {
 
     private Context context;
@@ -33,6 +52,8 @@ public class SQLDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_AMOUNT_BUDGET_TRANSACTIONS = "amount";
     private static final String COLUMN_DATE_BUDGET_TRANSACTIONS = "date";
     private static final String COLUMN_CATEGORY_BUDGET_TRANSACTIONS = "category";
+
+
 
 
 
@@ -85,6 +106,23 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
         cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Transportation");
         db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
+        cv.clear();
+
+
+        cv.put(COLUMN_CATEGORY_BUDGET_CATEGORIES, "M-Banking");
+        db.insert(TABLE_NAME_BUDGET_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_BUDGET_CATEGORIES, "Dana");
+        db.insert(TABLE_NAME_BUDGET_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_BUDGET_CATEGORIES, "OVO");
+        db.insert(TABLE_NAME_BUDGET_CATEGORIES, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_CATEGORY_BUDGET_CATEGORIES, "ShopeePay");
+        db.insert(TABLE_NAME_BUDGET_CATEGORIES, null, cv);
         cv.clear();
 
 
@@ -180,12 +218,27 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    Cursor getAllSpentCategories(){
+        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_SPENT_CATEGORIES;
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
 
+    }
 
+    Cursor getAllBudgetCategories(){
+        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_BUDGET_CATEGORIES;
+        SQLiteDatabase db = this.getReadableDatabase();
 
-
-
-
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
 
 }

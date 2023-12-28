@@ -5,12 +5,15 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +35,9 @@ public class AddBudgetActivity extends AppCompatActivity {
     Button saveBtn;
     Spinner spn;
 
+
+
+    EditText editText;
     //Kurang :
     // Icon Calender gx tau cara gesernya kalo di taro luar Button, icon ada dibelakang buttonnya iconya
     // validasi pop up pas neken save, cuma punya gw muncul di awal:v
@@ -48,58 +54,61 @@ public class AddBudgetActivity extends AppCompatActivity {
         dateBtn.setText(getTodayDate());
         saveBtn = findViewById(R.id.saveButton);
         spn = findViewById(R.id.spinner);
-
+        editText = findViewById(R.id.editTextPhone);
 
         //Spinner
-        spn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> AdapterView, View view, int position, long id) {
-                String item = AdapterView.getItemAtPosition(position).toString();
-                Toast.makeText(AddBudgetActivity.this, "" + item, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         ArrayList<String> arrList = new ArrayList<>();
-        arrList.add("");
-        arrList.add("M-Banking");
-        arrList.add("Dana");
-        arrList.add("OVO");
-        arrList.add("ShoppePay");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, arrList);
+        getAllBudgetCategories(arrList);
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.item_color_spinner, arrList);
         adapter.setDropDownViewResource(R.layout.dropdown_color_spinner);
         spn.setAdapter(adapter);
+
+
 
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(AddBudgetActivity.this, SpentBudgetActivity.class);
-                startActivity(intent);
+
+                AlertDialog dialog = new AlertDialog.Builder(AddBudgetActivity.this)
+                    .setTitle("Warning!")
+                    .setMessage("Are You Sure with your choice?")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            if (spn.getSelectedItem() == "Category" || editText.getText().toString().trim().equals("")){
+                                dialog.dismiss();
+
+                            }else{
+//                                Toast.makeText(AddBudgetActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddBudgetActivity.this, dateBtn.getText(), Toast.LENGTH_SHORT).show();
+                                addBudgetTransaction();
+//                                startActivity(intent);
+                            }
+
+
+
+                        }
+                    })
+                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    }).show();
+
             }
+
+//
         });
+    }
 
         //Pop up  Validation
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Warning!")
-                .setMessage("Are You Sure with your choice?")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Toast.makeText(AddBudgetActivity.this,"Success",Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).show();
-    }
+
 //    private void OpenDialog() {
 //        ExampleDialog exampleDialog = new ExampleDialog();
 //        exampleDialog.show(getSupportFragmentManager(),"example dialog");
@@ -134,26 +143,25 @@ public class AddBudgetActivity extends AppCompatActivity {
         return MakeDateString(day, month, year);
     }
 
-    private void initDatePicker() {
-        DatePickerDialog.OnDateSetListener DateListener = new DatePickerDialog.OnDateSetListener() {
+    private DatePickerDialog initDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int day) {
-                month = month+1;
-                String date = MakeDateString(day, month, year);
-                dateBtn.setText(date);
+            public void onDateSet(DatePicker view, int selectedYear, int selectedMonth, int selectedDay) {
+                dateBtn.setText(MakeDateString(selectedDay, selectedMonth + 1, selectedYear));
             }
-        };
-        Calendar cdr = Calendar.getInstance();
-        int day = cdr.get(Calendar.DAY_OF_MONTH);
-        int month = cdr.get(Calendar.MONTH);
-        int year = cdr.get(Calendar.YEAR);
+        }, year, month, day);
 
-        int style = AlertDialog.THEME_HOLO_DARK;
-        pickerDialog = new DatePickerDialog(this, style, DateListener, day, month, year);
+        return datePickerDialog;
+
+
     }
 
     private String MakeDateString(int day, int month, int year) {
-        return getMonthFormat(month)+"/"+day+"/"+year;
+        return day+"/"+getMonthFormat(month)+"/"+year;
     }
 
     private String getMonthFormat(int month) {
@@ -197,6 +205,32 @@ public class AddBudgetActivity extends AppCompatActivity {
     }
     public void openDatePicker(View view) {
 
-        pickerDialog.show();
+        initDatePicker().show();
+    }
+
+    void getAllBudgetCategories(ArrayList<String> populateData){
+        SQLDatabase transactionsDB = new SQLDatabase(AddBudgetActivity.this);
+        Cursor cursor = transactionsDB.getAllBudgetCategories();
+        if (cursor.getCount() == 0){
+            spn.setVisibility(View.INVISIBLE);
+        }
+        else{
+            while (cursor.moveToNext()){
+                populateData.add(cursor.getString(0));
+            }
+        }
+
+    }
+
+    void addBudgetTransaction(){
+        SQLDatabase transactionsDB = new SQLDatabase(AddBudgetActivity.this);
+        transactionsDB.addBudgetTransactions(Integer.parseInt(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString());
+    }
+
+    String formatDateForDB(String date){
+        String[] formatDate = date.split("/");
+        return formatDate[2] + "-" + formatDate[1] + "-" + formatDate[0];
     }
 }
+
+

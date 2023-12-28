@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddBudgetActivity.class);
+                Intent intent = new Intent(MainActivity.this, SpentBudgetActivity.class);
                 startActivity(intent);
             }
         });
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            topSpentTextView.setText(String.format("You spent %s on %s this month!", dataList.get(0)[1], dataList.get(0)[0]));
+            topSpentTextView.setText(String.format("You spent %s on %s!", dataList.get(0)[1], dataList.get(0)[0]));
             Log.e("DATALIST", Arrays.toString(dataList.get(0)));
 
             SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAllSpent);
@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
 
     int getSumOfSpentDividedIntoCategories(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
