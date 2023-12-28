@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    >
+
+    <ImageView
+        android:id="@+id/iconRecyclerView"
+        android:layout_marginTop="10dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/rounded_corners_main_screen"
+        android:src="@drawable/groceries_icon"
+        android:scaleType="center"
+        >
+
+    </ImageView>
+
+    <LinearLayout
+        android:layout_margin="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/categoryRecyclerView"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:fontFamily="@font/dmsansbold"
+            android:textSize="12sp"
+            android:text="test">
+        </TextView>
+        <TextView
+            android:id="@+id/dateRecyclerView"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="test"
+            android:textSize="12sp"
+            android:textColor="@color/white80">
+        </TextView>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/amountRecyclerView"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="test"
+        android:textSize="18sp"
+        android:fontFamily="@font/dmsansbold">
+
+    </TextView>
+</LinearLayout>

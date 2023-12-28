@@ -1,6 +1,7 @@
 package com.example.mobile_programming_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,6 +31,8 @@ public class FinancialDetailsActivity extends AppCompatActivity {
 
     TextView totalBalanceTextView, earnedTextView, spentTextView;
 
+    ViewPager viewPager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,8 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         earnedLineChart.getAxisLeft().setEnabled(false);
         earnedLineChart.getAxisRight().setEnabled(false);
         earnedLineChart.getLegend().setEnabled(false);
+        earnedLineChart.setScaleEnabled(false);
+        earnedLineChart.setTouchEnabled(false);
 
         spentLineChart = findViewById(R.id.spentLineChart);
 
@@ -57,6 +62,14 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         spentLineChart.getAxisLeft().setEnabled(false);
         spentLineChart.getAxisRight().setEnabled(false);
         spentLineChart.getLegend().setEnabled(false);
+        spentLineChart.setScaleEnabled(false);
+        spentLineChart.setTouchEnabled(false);
+
+        viewPager = findViewById(R.id.fragmentViewPager);
+
+        setupViewPager(viewPager);
+
+
 
         addSpentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +102,13 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         totalBalanceTextView.setText(String.format("Your balance is Rp%s", formatInteger(sumOfBudget - sumOfSpent)));
         setDataEarned();
         setDataSpent();
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
+        adapter.addFragment(new TransactionHistoryFragment());
+        adapter.addFragment(new DetailedCategoriesFragment());
+        viewPager.setAdapter(adapter);
     }
 
     void getSumOfBudget() {

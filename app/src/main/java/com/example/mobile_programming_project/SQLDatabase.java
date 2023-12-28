@@ -26,6 +26,9 @@ class Transaction{
     int amount;
     String date;
     String category;
+    
+
+    
 }
 
 public class SQLDatabase extends SQLiteOpenHelper {
@@ -262,4 +265,17 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    Cursor getAllTransactionsSortedByDate(){
+        String query = "SELECT * FROM " + TABLE_NAME_BUDGET_TRANSACTIONS +
+                       " UNION ALL " +
+                       "SELECT * FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+                       " ORDER BY " + COLUMN_DATE_BUDGET_TRANSACTIONS;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+
+    }
 }

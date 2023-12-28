@@ -5,18 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:layout_gravity="center"
     tools:context=".FinancialDetailsActivity">
 
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent">
+        android:scrollbars="none"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <ImageButton
                 android:id="@+id/backButton"
@@ -62,22 +67,22 @@
                 android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView">
-            </com.github.mikephil.charting.charts.LineChart>
+                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView"></com.github.mikephil.charting.charts.LineChart>
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="fill_horizontal"
-                android:layout_margin="10dp"
+
+                android:layout_marginTop="120dp"
                 android:background="@drawable/rounded_corners_main_screen"
+                android:gravity="fill_horizontal"
                 android:orientation="horizontal"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/earningLineChart">
+                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -116,8 +121,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
                     android:layout_gravity="center"
+                    android:layout_marginEnd="20dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -153,7 +158,6 @@
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
 
                 android:background="@drawable/rounded_corners_main_screen"
                 android:backgroundTint="@color/redspent"
@@ -170,7 +174,6 @@
                 android:id="@+id/addEarnedButton"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_corners_main_screen"
                 android:backgroundTint="@color/greenearned"
@@ -178,11 +181,10 @@
                 android:text="@string/add_budget"
                 android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
-            </Button>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"></Button>
 
-            <FrameLayout
-                android:id="@+id/fragmentContainerFinancialDetails"
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/fragmentViewPager"
                 android:layout_width="370dp"
                 android:layout_height="400dp"
 
