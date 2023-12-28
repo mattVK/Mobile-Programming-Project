@@ -3,6 +3,7 @@ package com.example.mobile_programming_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     int sumOfAllBudget;
 
-    Button moreDetailsButton, viewBudgetPlanButton;
+    Button moreDetailsButton, viewBudgetPlanButton,btn;
     TextView spentTextView, budgetTextView, availableBalanceNumberTextView, topSpentTextView;
 
     ListView sumCategoriesListView;
@@ -57,6 +58,18 @@ public class MainActivity extends AppCompatActivity {
         availableBalanceNumberTextView = findViewById(R.id.availableBalanceNumberTextView);
         topSpentTextView = findViewById(R.id.topSpentCategoryTextView);
         pieChartMain = findViewById(R.id.pieChartMainScreen);
+
+        //buat ke addbudgetnya
+        btn = findViewById(R.id.button4);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddBudgetActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         moreDetailsButton.setOnClickListener(new View.OnClickListener(){
             SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
