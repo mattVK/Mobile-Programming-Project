@@ -10,4 +10,7 @@
     <string name="top_spent_category">You haven\'t spent yet.</string>
     <string name="expenses_overview">Expenses Overview</string>
     <string name="view_budget_plan">View Budget Plan</string>
+    <string name="balance_financial_details">Your balance is Rp390.000</string>
+    <string name="add_budget">Add Budget</string>
+    <string name="add_spent">Add Spent</string>
 </resources>

@@ -60,32 +60,22 @@ public class MainActivity extends AppCompatActivity {
         pieChartMain = findViewById(R.id.pieChartMainScreen);
 
         //buat ke addbudgetnya
-        btn = findViewById(R.id.button4);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SpentBudgetActivity.class);
-                startActivity(intent);
-            }
-        });
 
 
         moreDetailsButton.setOnClickListener(new View.OnClickListener(){
-            SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
             @Override
             public void onClick(View v) {
-                transactionsDB.addSpentTransactions(192000, "2002-11-20", "Shopping");
+                startActivity(new Intent(MainActivity.this, FinancialDetailsActivity.class));
             }
 
 
         });
 
         viewBudgetPlanButton.setOnClickListener(new View.OnClickListener(){
-            SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
+
             @Override
             public void onClick(View v) {
-                transactionsDB.addSpentTransactions(100000, "2002-11-20", "Food & Drinks");
+                startActivity(new Intent(MainActivity.this, FinancialDetailsActivity.class));
             }
         });
 
@@ -131,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            topSpentTextView.setText(String.format("You spent %s on %s!", dataList.get(0)[1], dataList.get(0)[0]));
+            topSpentTextView.setText(String.format("You spent %s on %s!", formatInteger(Integer.parseInt(dataList.get(0)[1])), dataList.get(0)[0]));
             Log.e("DATALIST", Arrays.toString(dataList.get(0)));
 
             SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAllSpent);

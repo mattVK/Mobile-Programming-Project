@@ -49,7 +49,7 @@ public class SpentBudgetActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SpentBudgetActivity.this, MainActivity.class);
+                Intent intent = new Intent(SpentBudgetActivity.this, FinancialDetailsActivity.class);
                 AlertDialog dialog = new AlertDialog.Builder(SpentBudgetActivity.this)
                         .setTitle("Warning!")
                         .setMessage("Are You Sure with your choice?")
@@ -64,7 +64,7 @@ public class SpentBudgetActivity extends AppCompatActivity {
 //                                Toast.makeText(AddBudgetActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                     Toast.makeText(SpentBudgetActivity.this, dateBtn.getText(), Toast.LENGTH_SHORT).show();
                                     addSpentTransaction();
-//                                startActivity(intent);
+                                    startActivity(intent);
                                 }
 
 

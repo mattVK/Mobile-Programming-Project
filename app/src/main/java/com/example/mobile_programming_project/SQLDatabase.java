@@ -241,4 +241,25 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
+    Cursor getAllBudgetCategoriesSortedByDate(){
+        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_BUDGET_CATEGORIES + " ORDER BY " + COLUMN_DATE_BUDGET_TRANSACTIONS + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+    Cursor getAllSpentCategoriesSortedByDate(){
+        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_SPENT_CATEGORIES + " ORDER BY " + COLUMN_DATE_SPENT_TRANSACTIONS + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
 }

@@ -71,7 +71,7 @@ public class AddBudgetActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AddBudgetActivity.this, SpentBudgetActivity.class);
+                Intent intent = new Intent(AddBudgetActivity.this, FinancialDetailsActivity.class);
 
                 AlertDialog dialog = new AlertDialog.Builder(AddBudgetActivity.this)
                     .setTitle("Warning!")
@@ -87,7 +87,7 @@ public class AddBudgetActivity extends AppCompatActivity {
 //                                Toast.makeText(AddBudgetActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                 Toast.makeText(AddBudgetActivity.this, dateBtn.getText(), Toast.LENGTH_SHORT).show();
                                 addBudgetTransaction();
-//                                startActivity(intent);
+                                startActivity(intent);
                             }
 
 
