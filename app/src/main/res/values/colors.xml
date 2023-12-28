@@ -9,4 +9,6 @@
     <color name="redspent">#FF5141</color>
     <color name="greenearned">#00D83C</color>
     <color name="grey">#33D8D8D8</color>
+    <color name="bottomfade">#00FFFFFF</color>
+    <color name="topfade">#697596</color>
 </resources>

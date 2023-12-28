@@ -49,19 +49,21 @@
             </TextView>
 
             <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/lineChart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/earningLineChart"
+                android:layout_width="380dp"
+                android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView" />
 
             <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/spentLineChart"
+                android:layout_width="380dp"
+                android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView"></com.github.mikephil.charting.charts.LineChart>
+                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView">
+            </com.github.mikephil.charting.charts.LineChart>
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
@@ -75,7 +77,7 @@
                 android:paddingVertical="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lineChart">
+                app:layout_constraintTop_toBottomOf="@+id/earningLineChart">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -103,7 +105,7 @@
                         android:fontFamily="@font/dmsansbold"
                         android:text="@string/earned_rp_number"
                         android:textColor="@color/white"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         app:drawableStartCompat="@drawable/round_small_main_screen"
                         app:drawableTint="@color/greenearned">
 
@@ -136,7 +138,7 @@
                         android:fontFamily="@font/dmsansbold"
                         android:text="@string/spent_rp_number"
                         android:textColor="@color/white"
-                        android:textSize="24sp"
+                        android:textSize="18sp"
                         app:drawableStartCompat="@drawable/round_small_main_screen"
                         app:drawableTint="@color/redspent">
 
