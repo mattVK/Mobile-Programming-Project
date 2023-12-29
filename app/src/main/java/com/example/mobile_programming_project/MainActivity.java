@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            topSpentTextView.setText(String.format("You spent %s on %s!", formatInteger(Integer.parseInt(dataList.get(0)[1])), dataList.get(0)[0]));
+            topSpentTextView.setText(String.format("You spent %s on %s this month!", formatInteger(Integer.parseInt(dataList.get(0)[1])), dataList.get(0)[0]));
             Log.e("DATALIST", Arrays.toString(dataList.get(0)));
 
             SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAllSpent);
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity {
 
     void getSumOfSpent(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
-        Cursor cursor = transactionsDB.getSumOfSpentCategories();
+        Cursor cursor = transactionsDB.getSumOfSpentCategoriesMonthly();
 
         if (cursor.getCount() == 0){
             spentTextView.setText("0");
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     void getSumOfBudget(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
-        Cursor cursor = transactionsDB.getSumOfBudgetCategories();
+        Cursor cursor = transactionsDB.getSumOfBudgetCategoriesMonthly();
 
         if (cursor.getCount() == 0){
             budgetTextView.setText("0");
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
     int getSumOfSpentDividedIntoCategories(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
-        Cursor cursor = transactionsDB.getSumOfSpentCategoriesByCategory();
+        Cursor cursor = transactionsDB.getSumOfSpentCategoriesByCategoryMonthly();
         if (cursor.getCount() == 0){
             sumCategoriesListView.setVisibility(View.INVISIBLE);
             return -1;

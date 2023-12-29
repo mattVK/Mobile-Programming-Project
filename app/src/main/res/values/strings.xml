@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Mobile-Programming-Project</string>
     <string name="available_balance">390.000</string>
-    <string name="available_balance_text">Available Balance (Rp)</string>
+    <string name="available_balance_text">Available Balance (Monthly)</string>
     <string name="spent_rp_text">Spent (Rp)</string>
     <string name="spent_rp_number">860.000</string>
     <string name="earned_rp_number">1.250.000</string>

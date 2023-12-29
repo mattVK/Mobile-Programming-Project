@@ -226,4 +226,11 @@ public class FinancialDetailsActivity extends AppCompatActivity {
 
     }
 
+    public void updateFinancialDetailsUI(){
+        getSumOfSpent();
+        getSumOfBudget();
+        totalBalanceTextView.setText(String.format("Your balance is Rp%s", formatInteger(sumOfBudget - sumOfSpent)));
+        setDataEarned();
+        setDataSpent();
+    }
 }

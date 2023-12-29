@@ -5,11 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 class Transaction{
@@ -255,7 +259,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
     Cursor getAllSpentCategoriesSortedByDate(){
-        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_SPENT_TRANSACTIONS + " ORDER BY " + COLUMN_DATE_SPENT_TRANSACTIONS + " DESC";
+        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_SPENT_TRANSACTIONS + " ORDER BY " + COLUMN_DATE_SPENT_TRANSACTIONS + " ASC";
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -269,7 +273,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_NAME_BUDGET_TRANSACTIONS +
                        " UNION ALL " +
                        "SELECT * FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
-                       " ORDER BY " + COLUMN_DATE_BUDGET_TRANSACTIONS;
+                       " ORDER BY " + COLUMN_DATE_BUDGET_TRANSACTIONS + " DESC";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
         if (db != null){
@@ -278,4 +282,108 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
 
     }
+
+    Cursor getAllBudgetTransactionsSortedByDate(){
+        String query = "SELECT * FROM " + TABLE_NAME_BUDGET_TRANSACTIONS +
+                " ORDER BY " + COLUMN_DATE_BUDGET_TRANSACTIONS + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+
+    }
+    Cursor getAllSpentTransactionsSortedByDate(){
+        String query = "SELECT * FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+                " ORDER BY " + COLUMN_DATE_SPENT_TRANSACTIONS + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+
+    }
+
+    Cursor getSumOfBudgetCategoriesMonthly(){
+        Calendar calendar = Calendar.getInstance();
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+        String formattedDate = dateFormat.format(calendar.getTime());
+
+
+
+        String query = "SELECT SUM("+ COLUMN_AMOUNT_BUDGET_TRANSACTIONS+") FROM " + TABLE_NAME_BUDGET_TRANSACTIONS +
+                       " WHERE strftime('%Y-%m',"+COLUMN_DATE_BUDGET_TRANSACTIONS+  ") =" + "'"+formattedDate+"'" +";";
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    Cursor getSumOfSpentCategoriesMonthly(){
+        Calendar calendar = Calendar.getInstance();
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+        String formattedDate = dateFormat.format(calendar.getTime());
+
+
+
+        String query = "SELECT SUM("+COLUMN_AMOUNT_SPENT_TRANSACTIONS+") FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+                " WHERE strftime('%Y-%m'," + COLUMN_DATE_SPENT_TRANSACTIONS +")" + " =" + "'"+ formattedDate + "'";
+
+        Log.d("DATE", query);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    Cursor getSumOfSpentCategoriesByCategoryMonthly(){
+        Calendar calendar = Calendar.getInstance();
+
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM", Locale.getDefault());
+        String formattedDate = dateFormat.format(calendar.getTime());
+        String query = "SELECT "+ COLUMN_CATEGORY_SPENT_TRANSACTIONS+"," +" SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS  + ")" + ", COUNT(*) " + "FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+                " WHERE strftime('%Y-%m',"+COLUMN_DATE_SPENT_TRANSACTIONS+  ")= " + "'" + formattedDate + "'" +
+                " GROUP BY " + COLUMN_CATEGORY_SPENT_TRANSACTIONS;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+        return cursor;
+    }
+
+    public void deleteRow(long id, String transactionType){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = null;
+        if (transactionType.equals("spent")){
+            query = "DELETE FROM " + TABLE_NAME_SPENT_TRANSACTIONS + " WHERE " + COLUMN_ID_SPENT_TRANSACTIONS + " = " + id;
+        }
+        else{
+            query = "DELETE FROM " + TABLE_NAME_BUDGET_TRANSACTIONS + " WHERE " + COLUMN_ID_BUDGET_TRANSACTIONS + " = " + id;
+        }
+        if (query != null){
+            db.execSQL(query);
+        }
+        Toast.makeText(context, "TEST", Toast.LENGTH_LONG).show();
+
+        db.close();
+
+
+    }
+
+
 }

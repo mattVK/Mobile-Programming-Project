@@ -176,7 +176,9 @@ public class SpentBudgetActivity extends AppCompatActivity {
     }
     String formatDateForDB(String date){
         String[] formatDate = date.split("/");
-        return formatDate[2] + "-" + formatDate[1] + "-" + formatDate[0];
+        return formatDate[2] + "-" + formatDate[0] + "-" + formatDate[1];
     }
+
+
 }
 

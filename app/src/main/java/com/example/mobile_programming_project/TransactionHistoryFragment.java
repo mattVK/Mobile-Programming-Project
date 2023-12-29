@@ -9,14 +9,12 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,23 +86,11 @@ public class TransactionHistoryFragment extends Fragment {
         dividerItemDecoration.setDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.divider));
         rv.addItemDecoration(dividerItemDecoration);
 
-        List<Transaction> sortedMerged = getAllTransactions();
-        List<Transaction> sortedSpent = new ArrayList<>();
-        List<Transaction> sortedEarned = new ArrayList<>();
-
-        for (Transaction transaction:
-             sortedMerged) {
-            if (Objects.equals(transaction.transactionType, "spent")){
-                sortedSpent.add(transaction);
-            }
-            else{
-                sortedEarned.add(transaction);
-            }
-        }
 
 
 
-        TransactionHistoryRecyclerAdapter adapter = new TransactionHistoryRecyclerAdapter(sortedMerged);
+
+        TransactionHistoryRecyclerAdapter adapter = new TransactionHistoryRecyclerAdapter(getContext(), getAllTransactions(),(FinancialDetailsActivity) getActivity());
         rv.setAdapter(adapter);
 
 
@@ -112,7 +98,7 @@ public class TransactionHistoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (earnedFlag == 0){
-                    adapter.updateData(sortedEarned);
+                    adapter.updateData(getAllBudgetTransactions());
                     earnedFlag = 1;
                     spentFlag = 0;
                 } else{
@@ -128,7 +114,7 @@ public class TransactionHistoryFragment extends Fragment {
             public void onClick(View v) {
 
                 if (spentFlag == 0){
-                    adapter.updateData(sortedSpent);
+                    adapter.updateData(getAllSpentTransactions());
                     spentFlag = 1;
                     earnedFlag = 0;
                 }else{
@@ -143,6 +129,9 @@ public class TransactionHistoryFragment extends Fragment {
 
         return view;
     }
+
+
+
 
     List<Transaction> getAllTransactions(){
         List<Transaction> transactionList = new ArrayList<>();
@@ -164,6 +153,48 @@ public class TransactionHistoryFragment extends Fragment {
         return transactionList;
     }
 
+    List<Transaction> getAllBudgetTransactions(){
+        List<Transaction> transactionList = new ArrayList<>();
+        SQLDatabase transactionsDB = new SQLDatabase(getContext());
+        Cursor cursor = transactionsDB.getAllBudgetTransactionsSortedByDate();
+        if (cursor.getCount() == 0){
+            rv.setVisibility(View.INVISIBLE);
+
+        }else{
+            while(cursor.moveToNext()){
+                transactionList.add(new Transaction(
+                        typeOfTransaction(cursor.getString(3)),
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getString(2),
+                        cursor.getString(3)));
+            }
+        }
+        return transactionList;
+    }
+
+    List<Transaction> getAllSpentTransactions(){
+        List<Transaction> transactionList = new ArrayList<>();
+        SQLDatabase transactionsDB = new SQLDatabase(getContext());
+        Cursor cursor = transactionsDB.getAllSpentTransactionsSortedByDate();
+        if (cursor.getCount() == 0){
+            rv.setVisibility(View.INVISIBLE);
+
+        }else{
+            while(cursor.moveToNext()){
+                transactionList.add(new Transaction(
+                        typeOfTransaction(cursor.getString(3)),
+                        cursor.getInt(0),
+                        cursor.getInt(1),
+                        cursor.getString(2),
+                        cursor.getString(3)));
+            }
+        }
+        return transactionList;
+    }
+
+
+
     String typeOfTransaction(String category){
         if (Objects.equals(category, "Food & Drinks") || Objects.equals(category, "Groceries") || Objects.equals(category, "Shopping") || Objects.equals(category, "Transportation")){
             return "spent";
@@ -173,4 +204,5 @@ public class TransactionHistoryFragment extends Fragment {
         }
 
     }
+
 }
