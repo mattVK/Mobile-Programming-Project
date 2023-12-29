@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,17 +96,22 @@ public class TransactionHistoryFragment extends Fragment {
 
 
         earnedButton.setOnClickListener(new View.OnClickListener() {
+
+
+
             @Override
             public void onClick(View v) {
+                rv.setVisibility(View.VISIBLE);
+
                 if (earnedFlag == 0){
+
                     adapter.updateData(getAllBudgetTransactions());
                     earnedFlag = 1;
-                    spentFlag = 0;
                 } else{
                     adapter.updateData(getAllTransactions());
                     earnedFlag = 0;
-                    spentFlag = 0;
                 }
+                spentFlag = 0;
             }
         });
 
@@ -113,16 +119,17 @@ public class TransactionHistoryFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
+
                 if (spentFlag == 0){
+
                     adapter.updateData(getAllSpentTransactions());
                     spentFlag = 1;
-                    earnedFlag = 0;
                 }else{
-
                     adapter.updateData(getAllTransactions());
                     spentFlag = 0;
-                    earnedFlag = 0;
                 }
+                earnedFlag = 0;
             }
         });
 
