@@ -1,10 +1,6 @@
 package com.example.mobile_programming_project;
 
-import static java.lang.String.*;
-
 import android.content.Context;
-import android.media.Image;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +11,7 @@ import android.widget.TextView;
 
 import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class DetailedCategoryListAdapter extends BaseAdapter {
@@ -73,7 +70,7 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
 
         categoriesTextView.setText(dataList.get(position)[0]);
         totalAmountTextView.setText(formatInteger(Integer.parseInt(dataList.get(position)[1])));
-        totalPercentLimitTextView.setText(String.format( "%d%%", (int) percent));
+        totalPercentLimitTextView.setText(String.format(Locale.getDefault(), "%d%%", (int) percent));
 
 
 

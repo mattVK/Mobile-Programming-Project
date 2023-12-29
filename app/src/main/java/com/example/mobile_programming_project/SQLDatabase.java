@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 
@@ -37,7 +36,7 @@ class Transaction{
 
 public class SQLDatabase extends SQLiteOpenHelper {
 
-    private Context context;
+    private final Context context;
     private static final String DATABASE_NAME = "TransactionsLibrary.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -222,20 +221,6 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    //sum of categories grouped for main screen.
-
-    Cursor getSumOfSpentCategoriesByCategory(){
-        String query = "SELECT "+ COLUMN_CATEGORY_SPENT_TRANSACTIONS+"," +"SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS  + ")" + ", COUNT(*) " + "FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
-                       " GROUP BY " + COLUMN_CATEGORY_SPENT_TRANSACTIONS;
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        Cursor cursor = null;
-        if (db != null){
-            cursor = db.rawQuery(query, null);
-        }
-        return cursor;
-    }
-
     Cursor getAllSpentCategories(){
         String query = "SELECT " + COLUMN_CATEGORY_SPENT_CATEGORIES + " FROM " + TABLE_NAME_SPENT_CATEGORIES;
         SQLiteDatabase db = this.getReadableDatabase();
@@ -379,16 +364,15 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
     public void deleteRow(long id, String transactionType){
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = null;
+        String query;
         if (transactionType.equals("spent")){
             query = "DELETE FROM " + TABLE_NAME_SPENT_TRANSACTIONS + " WHERE " + COLUMN_ID_SPENT_TRANSACTIONS + " = " + id;
         }
         else{
             query = "DELETE FROM " + TABLE_NAME_BUDGET_TRANSACTIONS + " WHERE " + COLUMN_ID_BUDGET_TRANSACTIONS + " = " + id;
         }
-        if (query != null){
-            db.execSQL(query);
-        }
+        db.execSQL(query);
+
 
 
         db.close();
