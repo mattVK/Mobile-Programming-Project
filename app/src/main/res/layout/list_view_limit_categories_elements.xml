@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:background="@drawable/rounded_corners_main_screen"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iconList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/shopping_icon">
+        </ImageView>
+        
+        <TextView
+            android:id="@+id/categoryList"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/available_balance"
+            android:layout_width="380dp"
+            android:textColor="@color/white"
+            android:fontFamily="@font/dmsansbold"
+            android:layout_height="wrap_content">
+        </TextView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/progressBarList"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        </ProgressBar>
+        <TextView
+            android:id="@+id/percentageList"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="-50dp"
+            android:layout_width="wrap_content"
+            android:text="test"
+            android:fontFamily="@font/dmsansbold"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/totalAmountList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="-250dp"
+            android:fontFamily="@font/dmsansbold"
+            android:text="test"
+            android:textColor="@color/white">
+        </TextView>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

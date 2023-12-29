@@ -45,8 +45,12 @@ public class SQLDatabase extends SQLiteOpenHelper {
     private static final String TABLE_NAME_SPENT_CATEGORIES = "spent_categories";
     private static final String COLUMN_CATEGORY_SPENT_CATEGORIES = "_category";
 
+    private static final String COLUMN_LIMIT_SPENT_CATEGORIES = "limit_category";
+
     private static final String TABLE_NAME_BUDGET_CATEGORIES = "budget_categories";
     private static final String COLUMN_CATEGORY_BUDGET_CATEGORIES = "_category";
+
+    private static final String COLUMN_LIMIT_BUDGET_CATEGORIES = "limit_category";
 
     private static final String TABLE_NAME_SPENT_TRANSACTIONS = "spent_transactions";
     private static final String COLUMN_ID_SPENT_TRANSACTIONS = "_id";
@@ -73,10 +77,12 @@ public class SQLDatabase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String queryBudgetCategory = "CREATE TABLE " + TABLE_NAME_BUDGET_CATEGORIES + " ( " +
-                                     COLUMN_CATEGORY_BUDGET_CATEGORIES + " TEXT PRIMARY KEY);";
+                COLUMN_CATEGORY_BUDGET_CATEGORIES + " TEXT PRIMARY KEY, " +
+                COLUMN_LIMIT_BUDGET_CATEGORIES + " INTEGER );";
 
         String querySpentCategory = "CREATE TABLE " + TABLE_NAME_SPENT_CATEGORIES + " ( " +
-                COLUMN_CATEGORY_SPENT_CATEGORIES + " TEXT PRIMARY KEY);";
+                COLUMN_CATEGORY_SPENT_CATEGORIES + " TEXT PRIMARY KEY, " +
+                COLUMN_LIMIT_SPENT_CATEGORIES + " INTEGER );";
 
         String queryBudget = "CREATE TABLE " + TABLE_NAME_BUDGET_TRANSACTIONS + " ( " +
                         COLUMN_ID_BUDGET_TRANSACTIONS + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -100,18 +106,23 @@ public class SQLDatabase extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Groceries");
+        cv.put(COLUMN_LIMIT_SPENT_CATEGORIES, 1000000);
         db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
         cv.clear();
 
+
         cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Shopping");
+        cv.put(COLUMN_LIMIT_SPENT_CATEGORIES, 1000000);
         db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
         cv.clear();
 
         cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Food & Drinks");
+        cv.put(COLUMN_LIMIT_SPENT_CATEGORIES, 1000000);
         db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
         cv.clear();
 
         cv.put(COLUMN_CATEGORY_SPENT_CATEGORIES, "Transportation");
+        cv.put(COLUMN_LIMIT_SPENT_CATEGORIES, 1000000);
         db.insert(TABLE_NAME_SPENT_CATEGORIES, null, cv);
         cv.clear();
 
@@ -226,7 +237,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
     }
 
     Cursor getAllSpentCategories(){
-        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_SPENT_CATEGORIES;
+        String query = "SELECT " + COLUMN_CATEGORY_SPENT_CATEGORIES + " FROM " + TABLE_NAME_SPENT_CATEGORIES;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -238,7 +249,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
     }
 
     Cursor getAllBudgetCategories(){
-        String query = "SELECT " + "* " + "FROM " + TABLE_NAME_BUDGET_CATEGORIES;
+        String query = "SELECT " + COLUMN_CATEGORY_BUDGET_CATEGORIES + " FROM " + TABLE_NAME_BUDGET_CATEGORIES;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = null;
@@ -316,7 +327,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
 
         String query = "SELECT SUM("+ COLUMN_AMOUNT_BUDGET_TRANSACTIONS+") FROM " + TABLE_NAME_BUDGET_TRANSACTIONS +
-                       " WHERE strftime('%Y-%m',"+COLUMN_DATE_BUDGET_TRANSACTIONS+  ") =" + "'"+formattedDate+"'" +";";
+                       "  WHERE strftime('%Y-%m',"+COLUMN_DATE_BUDGET_TRANSACTIONS+  " ) =" + "'"+formattedDate+"'" +";";
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = null;
@@ -378,12 +389,26 @@ public class SQLDatabase extends SQLiteOpenHelper {
         if (query != null){
             db.execSQL(query);
         }
-        Toast.makeText(context, "TEST", Toast.LENGTH_LONG).show();
+
 
         db.close();
 
 
     }
 
+    Cursor getCategoriesAndLimits(){
 
+        String query = "SElECT " + COLUMN_CATEGORY_SPENT_TRANSACTIONS + ", " +
+                "SUM(" + COLUMN_AMOUNT_SPENT_TRANSACTIONS +"), " + COLUMN_LIMIT_SPENT_CATEGORIES + " FROM " + TABLE_NAME_SPENT_TRANSACTIONS +
+                " JOIN " + TABLE_NAME_SPENT_CATEGORIES + " ON " + COLUMN_CATEGORY_SPENT_TRANSACTIONS + " = " + COLUMN_CATEGORY_SPENT_CATEGORIES +
+                " GROUP BY " + COLUMN_CATEGORY_SPENT_TRANSACTIONS;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        if (db != null){
+            cursor = db.rawQuery(query, null);
+        }
+
+        return cursor;
+    }
 }

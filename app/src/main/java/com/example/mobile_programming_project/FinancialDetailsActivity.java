@@ -1,6 +1,7 @@
 package com.example.mobile_programming_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
@@ -27,6 +28,8 @@ public class FinancialDetailsActivity extends AppCompatActivity {
     Button addSpentButton, addEarnedButton;
     ImageButton backButton;
 
+
+    DetailedCategoriesFragment fragment;
     LineChart earnedLineChart, spentLineChart;
 
     TextView totalBalanceTextView, earnedTextView, spentTextView;
@@ -66,6 +69,7 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         spentLineChart.setTouchEnabled(false);
 
         viewPager = findViewById(R.id.fragmentViewPager);
+
 
         setupViewPager(viewPager);
 
@@ -107,7 +111,8 @@ public class FinancialDetailsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new TransactionHistoryFragment());
-        adapter.addFragment(new DetailedCategoriesFragment());
+        fragment = new DetailedCategoriesFragment();
+        adapter.addFragment(fragment);
         viewPager.setAdapter(adapter);
     }
 
@@ -232,5 +237,6 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         totalBalanceTextView.setText(String.format("Your balance is Rp%s", formatInteger(sumOfBudget - sumOfSpent)));
         setDataEarned();
         setDataSpent();
+        fragment.updateFragment();
     }
 }

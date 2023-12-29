@@ -116,13 +116,13 @@ public class TransactionHistoryFragment extends Fragment {
         });
 
         spentButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-
+                rv.setVisibility(View.VISIBLE);
 
 
                 if (spentFlag == 0){
-
                     adapter.updateData(getAllSpentTransactions());
                     spentFlag = 1;
                 }else{
@@ -145,7 +145,7 @@ public class TransactionHistoryFragment extends Fragment {
         SQLDatabase transactionsDB = new SQLDatabase(getContext());
         Cursor cursor = transactionsDB.getAllTransactionsSortedByDate();
         if (cursor.getCount() == 0){
-            rv.setVisibility(View.INVISIBLE);
+
 
         }else{
             while(cursor.moveToNext()){

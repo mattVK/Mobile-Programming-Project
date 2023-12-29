@@ -1,12 +1,19 @@
 package com.example.mobile_programming_project;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +21,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class DetailedCategoriesFragment extends Fragment {
+
+    ListView listView;
+    DetailedCategoryListAdapter adapter;
+
+
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,7 +71,43 @@ public class DetailedCategoriesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detailed_categories, container, false);
+        View view = inflater.inflate(R.layout.fragment_detailed_categories, container, false);
+
+        listView = view.findViewById(R.id.detailedCategoriesListView);
+
+        adapter = new DetailedCategoryListAdapter(getContext(), getCategoriesAndLimits());
+
+        listView.setAdapter(adapter);
+
+
+
+        return view;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.updateData(getCategoriesAndLimits());
+    }
+
+    List<String[]> getCategoriesAndLimits(){
+        List<String[]> temp = new ArrayList<>();
+        SQLDatabase transactionsDB = new SQLDatabase(getContext());
+        Cursor cursor = transactionsDB.getCategoriesAndLimits();
+        if (cursor.getCount() == 0){
+            return temp;
+        }else{
+            while(cursor.moveToNext()){
+                String[] tempArray = {cursor.getString(0), String.valueOf(cursor.getInt(1)), String.valueOf(cursor.getInt(2))};
+                temp.add(tempArray);
+            }
+        }
+        return temp;
+    }
+
+    public void updateFragment(){
+        adapter.updateData(getCategoriesAndLimits());
+    }
+
+
 }

@@ -1,5 +1,7 @@
 package com.example.mobile_programming_project;
 
+
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -35,6 +37,8 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
     private int clickPosition;
 
     private FinancialDetailsActivity financialDetailsActivity;
+
+
     private ActionMode.Callback actionModeCallbacks = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -53,6 +57,7 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
             transactionsDB.deleteRow(dataList.get(clickPosition).id, dataList.get(clickPosition).transactionType);
             dataList.remove(clickPosition);
             financialDetailsActivity.updateFinancialDetailsUI();
+
             mode.finish();
             return true;
         }
