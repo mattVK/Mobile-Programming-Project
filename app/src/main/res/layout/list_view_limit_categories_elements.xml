@@ -16,17 +16,26 @@
             android:layout_height="wrap_content"
             android:src="@drawable/shopping_icon">
         </ImageView>
+
         
         <TextView
             android:id="@+id/categoryList"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
             android:text="@string/available_balance"
-            android:layout_width="380dp"
+            android:layout_width="280dp"
             android:textColor="@color/white"
             android:fontFamily="@font/dmsansbold"
             android:layout_height="wrap_content">
         </TextView>
+        <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editButtonList"
+        android:backgroundTint="#505050"
+        android:src="@drawable/edit_icon">
+    </ImageButton>
+
     </LinearLayout>
 
     <LinearLayout

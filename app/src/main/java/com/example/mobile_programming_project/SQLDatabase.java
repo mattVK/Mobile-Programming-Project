@@ -395,4 +395,19 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
         return cursor;
     }
+
+    void updateLimitOfCategory(String category, Integer data){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_LIMIT_SPENT_CATEGORIES, data);
+
+        String whereClause = COLUMN_CATEGORY_SPENT_CATEGORIES + " = ?";
+        String[] whereArgs = {category};
+
+        db.update(TABLE_NAME_SPENT_CATEGORIES, cv, whereClause, whereArgs);
+
+        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+        db.close();
+    }
 }
