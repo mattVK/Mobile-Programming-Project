@@ -1,12 +1,18 @@
 package com.example.mobile_programming_project;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,6 +29,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialogFragment;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -34,16 +43,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     private Button dateBtn;
     Button saveBtn;
     Spinner spn;
-
-
-
     EditText editText;
-    //Kurang :
-    // Icon Calender gx tau cara gesernya kalo di taro luar Button, icon ada dibelakang buttonnya iconya
-    // validasi pop up pas neken save, cuma punya gw muncul di awal:v
-    // sama tombol back gx tau gmna?
-    // warna awal spinner blm bisa, tpi yg dropdownnya udah
-    // button savenya msh
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +53,14 @@ public class AddBudgetActivity extends AppCompatActivity {
         dateBtn = findViewById(R.id.dateButton);
         dateBtn.setText(getTodayDate());
         saveBtn = findViewById(R.id.saveButton);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(AddBudgetActivity.this,
+                    Manifest.permission.POST_NOTIFICATIONS)!= PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(AddBudgetActivity.this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
         spn = findViewById(R.id.spinner);
         editText = findViewById(R.id.editTextPhone);
 
@@ -89,6 +97,7 @@ public class AddBudgetActivity extends AppCompatActivity {
                                 addBudgetTransaction();
                                 startActivity(intent);
                             }
+                            notification();
 
 
 
@@ -100,39 +109,9 @@ public class AddBudgetActivity extends AppCompatActivity {
                             dialog.dismiss();
                         }
                     }).show();
-
             }
-
-//
         });
     }
-
-        //Pop up  Validation
-
-//    private void OpenDialog() {
-//        ExampleDialog exampleDialog = new ExampleDialog();
-//        exampleDialog.show(getSupportFragmentManager(),"example dialog");
-//    }
-//    public class ExampleDialog extends AppCompatDialogFragment{
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//               builder.setTitle("Warning!")
-//                .setMessage("Are You Sure with your choice?")
-//                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                    }
-//                })
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//            return builder.create();
-//        }
-
-
     //Time Picker
     private String getTodayDate() {
         Calendar cdr = Calendar.getInstance();
@@ -208,6 +187,33 @@ public class AddBudgetActivity extends AppCompatActivity {
         initDatePicker().show();
     }
 
+    //Push Notification
+    private void notification() {
+        String channel = "Channel_ID_Notification";
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext(), channel);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("Success");
+        builder.setContentText("Your Add Budget have been Saved");
+        builder.setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel =
+                    notificationManager.getNotificationChannel(channel);
+            if(notificationChannel== null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(channel,
+                        "some Description", importance);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+
+        }
+        notificationManager.notify(0,builder.build());
+    }
+
     void getAllBudgetCategories(ArrayList<String> populateData){
         SQLDatabase transactionsDB = new SQLDatabase(AddBudgetActivity.this);
         Cursor cursor = transactionsDB.getAllBudgetCategories();
@@ -222,6 +228,7 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     }
 
+
     void addBudgetTransaction(){
         SQLDatabase transactionsDB = new SQLDatabase(AddBudgetActivity.this);
         transactionsDB.addBudgetTransactions(Integer.parseInt(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString());
@@ -232,5 +239,6 @@ public class AddBudgetActivity extends AppCompatActivity {
         return formatDate[2] + "-" + formatDate[1] + "-" + formatDate[0];
     }
 }
+
 
 

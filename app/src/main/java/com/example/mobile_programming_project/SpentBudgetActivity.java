@@ -1,10 +1,16 @@
 package com.example.mobile_programming_project;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +45,13 @@ public class SpentBudgetActivity extends AppCompatActivity {
         dateBtn = findViewById(R.id.dateButton);
         dateBtn.setText(getTodayDate());
         saveBtn = findViewById(R.id.saveButton);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if(ContextCompat.checkSelfPermission(SpentBudgetActivity.this,
+                    android.Manifest.permission.POST_NOTIFICATIONS)!= PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(SpentBudgetActivity.this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
         spn = findViewById(R.id.spinner);
         editText = findViewById(R.id.editTextPhone);
 
@@ -60,13 +76,13 @@ public class SpentBudgetActivity extends AppCompatActivity {
                                 if (spn.getSelectedItem() == "Category" || editText.getText().toString().trim().equals("")){
                                     dialog.dismiss();
 
-                                }else{
+                                }else {
 //                                Toast.makeText(AddBudgetActivity.this, "Success", Toast.LENGTH_SHORT).show();
                                     Toast.makeText(SpentBudgetActivity.this, dateBtn.getText(), Toast.LENGTH_SHORT).show();
                                     addSpentTransaction();
                                     startActivity(intent);
                                 }
-
+                                notification();;
 
 
                             }
@@ -155,7 +171,31 @@ public class SpentBudgetActivity extends AppCompatActivity {
         initDatePicker().show();
     }
 
+    private void notification() {
+        String channel = "Channel_ID_Notification";
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext(), channel);
+        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
+        builder.setContentTitle("Success");
+        builder.setContentText("Your Add Budget have been Saved");
+        builder.setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT>= Build.VERSION_CODES.O){
+            NotificationChannel notificationChannel =
+                    notificationManager.getNotificationChannel(channel);
+            if(notificationChannel== null){
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                notificationChannel = new NotificationChannel(channel,
+                        "some Description", importance);
+                notificationChannel.enableVibration(true);
+                notificationManager.createNotificationChannel(notificationChannel);
+            }
+
+        }
+        notificationManager.notify(0,builder.build());
+    }
     void getAllSpentCategories(ArrayList<String> populateData){
         SQLDatabase transactionsDB = new SQLDatabase(SpentBudgetActivity.this);
         Cursor cursor = transactionsDB.getAllSpentCategories();
