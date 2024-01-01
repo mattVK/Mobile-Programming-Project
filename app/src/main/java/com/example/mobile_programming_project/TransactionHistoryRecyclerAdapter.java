@@ -170,7 +170,7 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
                     clickPosition = getAdapterPosition();
                     selectedItemPosition = clickPosition;
 
-                    itemLayoutGroup.setBackgroundColor(0x12FFFFFF);
+
 
                     notifyItemChanged(clickPosition);
                     v.startActionMode(actionModeCallbacks);
