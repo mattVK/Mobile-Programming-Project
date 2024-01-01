@@ -106,6 +106,7 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         totalBalanceTextView.setText(String.format("Your balance is Rp%s", formatInteger(sumOfBudget - sumOfSpent)));
         setDataEarned();
         setDataSpent();
+        setupViewPager(viewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -237,6 +238,8 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         totalBalanceTextView.setText(String.format("Your balance is Rp%s", formatInteger(sumOfBudget - sumOfSpent)));
         setDataEarned();
         setDataSpent();
-        fragment.updateFragment();
+        if (fragment != null){
+            fragment.updateFragment();
+        }
     }
 }

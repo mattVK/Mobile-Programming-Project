@@ -11,4 +11,5 @@
     <color name="grey">#33D8D8D8</color>
     <color name="bottomfade">#00FFFFFF</color>
     <color name="topfade">#697596</color>
+    <color name="whitefade">#12FFFFFF</color>
 </resources>
