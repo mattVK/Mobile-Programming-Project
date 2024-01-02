@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,9 +33,8 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
 
     private List<Transaction> dataList;
 
-
     private Context context;
-    private int clickPosition;
+    private int clickPosition, selectedItemPosition = RecyclerView.NO_POSITION;
 
     private FinancialDetailsActivity financialDetailsActivity;
 
@@ -54,17 +54,25 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             SQLDatabase transactionsDB = new SQLDatabase(context);
+
             transactionsDB.deleteRow(dataList.get(clickPosition).id, dataList.get(clickPosition).transactionType);
             dataList.remove(clickPosition);
             financialDetailsActivity.updateFinancialDetailsUI();
-
+            notifyItemRemoved(clickPosition);
             mode.finish();
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            notifyItemRemoved(clickPosition);
+            if (selectedItemPosition != RecyclerView.NO_POSITION) {
+                // Reset the selected item position
+                int previousSelectedItem = selectedItemPosition;
+                selectedItemPosition = RecyclerView.NO_POSITION;
+
+                // Notify the adapter that the item has changed
+                notifyItemChanged(previousSelectedItem);
+            }
         }
     };
 
@@ -97,6 +105,11 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
         holder.amountTextView.setText(String.format("%s%s", symbol, formatInteger(amount)));
         holder.amountTextView.setTextColor(Objects.equals(dataList.get(position).transactionType, "spent") ? 0xFFFF5141 : 0xFF00D83C);
 
+        if (position == selectedItemPosition) {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, R.color.whitefade));
+        } else {
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        }
 
 
     }
@@ -154,14 +167,22 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
 
                 @Override
                 public boolean onLongClick(View v) {
-                    v.startActionMode(actionModeCallbacks);
                     clickPosition = getAdapterPosition();
-                    itemLayoutGroup.setBackgroundColor(0x12FFFFFF);
+                    selectedItemPosition = clickPosition;
+
+
+
+                    notifyItemChanged(clickPosition);
+                    v.startActionMode(actionModeCallbacks);
+
                     return true;
                 }
+
             });
         }
-        }
+
+
+    }
 
 
 
