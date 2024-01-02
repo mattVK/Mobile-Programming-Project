@@ -2,18 +2,27 @@ package com.example.mobile_programming_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.DialogFragment;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -24,6 +33,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +42,8 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    PendingIntent pending_intent;
+    AlarmManager alarm_manager;
 
     List<String[]> dataList;
     int sumOfAllSpent;
@@ -60,16 +72,17 @@ public class MainActivity extends AppCompatActivity {
         topSpentTextView = findViewById(R.id.topSpentCategoryTextView);
         pieChartMain = findViewById(R.id.pieChartMainScreen);
 
-        //buat ke addbudgetnya
 
+        notification_channel();
+        pending_intent = PendingIntent.getBroadcast(getApplicationContext(), 0, new Intent(this, BroadCastReminderAlarm.class), PendingIntent.FLAG_IMMUTABLE);
+        alarm_manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
-        moreDetailsButton.setOnClickListener(new View.OnClickListener(){
+        moreDetailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, FinancialDetailsActivity.class));
+
             }
-
-
         });
 
         viewBudgetPlanButton.setOnClickListener(new View.OnClickListener(){
@@ -80,8 +93,40 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
 
+    private void notification_channel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Learn Turkish";
+            String description = "Learn Turkish Channel";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("Notification", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
+    public void set_notification_alarm(long interval) {
+        long triggerAtMillis = System.currentTimeMillis() + interval;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarm_manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval, pending_intent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarm_manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAtMillis, pending_intent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            alarm_manager.setExact(AlarmManager.RTC_WAKEUP, triggerAtMillis, pending_intent);
+        } else {
+            alarm_manager.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, pending_intent);
+        }
+    }
+
+    public void cancel_notification_alarm() {
+        alarm_manager.cancel(pending_intent);
     }
 
     @Override
@@ -137,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
     void getSumOfSpent(){
         SQLDatabase transactionsDB = new SQLDatabase(MainActivity.this);
@@ -195,7 +241,12 @@ public class MainActivity extends AppCompatActivity {
 
         return numberFormat.format(value).replace(",", ".");
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        set_notification_alarm(1*60*1000);
 
+    }
 
 }
 

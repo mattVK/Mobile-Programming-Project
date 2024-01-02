@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ public class SpentBudgetActivity extends AppCompatActivity {
     private Button dateBtn;
     Spinner spn;
     Button saveBtn;
+    ImageButton backButton;
 
     EditText editText;
 
@@ -52,6 +54,15 @@ public class SpentBudgetActivity extends AppCompatActivity {
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
             }
         }
+        backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backintent = new Intent(SpentBudgetActivity.this, FinancialDetailsActivity.class);
+                startActivity(backintent);
+            }
+        });
         spn = findViewById(R.id.spinner);
         editText = findViewById(R.id.editTextPhone);
 
@@ -177,7 +188,7 @@ public class SpentBudgetActivity extends AppCompatActivity {
                 new NotificationCompat.Builder(getApplicationContext(), channel);
         builder.setSmallIcon(R.drawable.ic_launcher_foreground);
         builder.setContentTitle("Success");
-        builder.setContentText("Your Add Budget have been Saved");
+        builder.setContentText("Your Spent Budget have been Saved");
         builder.setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
