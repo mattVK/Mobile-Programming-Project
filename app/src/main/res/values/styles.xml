@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme1" parent = "Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/topblue</item>
+    </style>
+
+    <style name="AppTheme2" parent = "Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/background</item>
+    </style>
+</resources>
+<!--Statusbar color sesuai page-->
