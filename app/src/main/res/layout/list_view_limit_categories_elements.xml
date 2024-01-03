@@ -25,6 +25,7 @@
             android:id="@+id/categoryList"
             android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
+            android:maxLines="1"
             android:text="@string/available_balance"
             android:layout_width="280dp"
             android:textColor="@color/white"
@@ -57,6 +58,7 @@
             android:layout_gravity="center_vertical"
 
             android:layout_marginStart="-90dp"
+            android:maxLines="1"
             android:layout_width="wrap_content"
             android:text="test"
             android:fontFamily="@font/dmsansbold"
@@ -70,6 +72,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:maxLines="1"
             android:layout_marginStart="-200dp"
             android:fontFamily="@font/dmsansbold"
             android:text="test"

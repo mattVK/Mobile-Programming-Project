@@ -34,7 +34,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/available_balance"
+                    android:ellipsize="end"
                     android:textSize="48sp"
+                    android:maxLines="1"
                     android:fontFamily="@font/dmsansbold"
                     android:textColor="@color/white">
                 </TextView>
@@ -42,6 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:text="@string/available_balance_text"
                     android:textSize="15sp"
                     android:fontFamily="@font/dmsansregular"
@@ -68,6 +71,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_margin="10dp"
+                    android:paddingBottom="16dp"
                     android:layout_gravity="center">
 
                     <LinearLayout
@@ -79,6 +83,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
                             android:text="@string/earned_rp_text"
                             android:fontFamily="@font/dmsansregular"
                             android:textSize="11sp"
@@ -89,10 +94,11 @@
                             android:id="@+id/earnedNumberTextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:maxLines="1"
                             android:text="@string/earned_rp_number"
                             android:fontFamily="@font/dmsansbold"
                             android:textColor="@color/white"
-                            android:textSize="24sp"
+                            android:textSize="12sp"
                             app:drawableStartCompat="@drawable/round_small_main_screen"
                             app:drawableTint="@color/greenearned"
                             android:drawablePadding="10dp">
@@ -111,6 +117,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/spent_rp_text"
+                            android:maxLines="1"
                             android:fontFamily="@font/dmsansregular"
                             android:textColor="@color/white80"
                             android:textSize="11sp">
@@ -121,7 +128,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/spent_rp_number"
-                            android:textSize="24sp"
+                            android:maxLines="1"
+                            android:textSize="12sp"
                             android:fontFamily="@font/dmsansbold"
                             android:textColor="@color/white"
                             app:drawableStartCompat="@drawable/round_small_main_screen"
@@ -143,6 +151,7 @@
                     android:id="@+id/topSpentCategoryTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:maxLines="1"
                     android:layout_gravity="center"
                     android:text="@string/top_spent_category"
                     android:textColor="@color/white"
@@ -174,10 +183,10 @@
                 android:text="@string/expenses_overview"
                 android:fontFamily="@font/dmsansbold"
                 android:textSize="18sp"
+                android:maxLines="1"
                 android:textColor="@color/white">
             </TextView>
 
-            <!-- TO DO ADD THING: CHART -->
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pieChartMainScreen"
                 android:layout_width="200dp"

@@ -42,6 +42,7 @@
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:maxLines="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -61,7 +62,8 @@
                 android:layout_height="150dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView"></com.github.mikephil.charting.charts.LineChart>
+                app:layout_constraintTop_toBottomOf="@+id/totalBalanceFinancialDetailsTextView">
+            </com.github.mikephil.charting.charts.LineChart>
 
             <LinearLayout
                 android:id="@+id/linearLayout4"
@@ -88,8 +90,9 @@
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:fontFamily="@font/dmsansregular"
+                        android:maxLines="1"
                         android:text="@string/earned_rp_text"
                         android:textColor="@color/white80"
                         android:textSize="11sp">
@@ -100,11 +103,13 @@
                         android:id="@+id/earnedNumberTextView"
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:drawablePadding="10dp"
                         android:fontFamily="@font/dmsansbold"
                         android:text="@string/earned_rp_number"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="12sp"
                         app:drawableStartCompat="@drawable/round_small_main_screen"
                         app:drawableTint="@color/greenearned">
 
@@ -125,6 +130,7 @@
                         android:fontFamily="@font/dmsansregular"
                         android:text="@string/spent_rp_text"
                         android:textColor="@color/white80"
+                        android:maxLines="1"
                         android:textSize="11sp">
 
                     </TextView>
@@ -134,10 +140,12 @@
                         android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:drawablePadding="10dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:fontFamily="@font/dmsansbold"
                         android:text="@string/spent_rp_number"
                         android:textColor="@color/white"
-                        android:textSize="18sp"
+                        android:textSize="12sp"
                         app:drawableStartCompat="@drawable/round_small_main_screen"
                         app:drawableTint="@color/redspent">
 
@@ -175,7 +183,8 @@
                 android:text="@string/add_budget"
                 android:textAllCaps="false"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout4"></Button>
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
+            </Button>
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/fragmentViewPager"
