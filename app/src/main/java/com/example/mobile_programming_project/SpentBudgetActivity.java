@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class SpentBudgetActivity extends AppCompatActivity {
 
@@ -135,7 +136,7 @@ public class SpentBudgetActivity extends AppCompatActivity {
     }
 
     private String MakeDateString(int day, int month, int year) {
-        return getMonthFormat(month)+"/"+day+"/"+year;
+        return String.format(Locale.getDefault(), "%02d/%02d/%d", day, month, year);
     }
 
     private String getMonthFormat(int month) {
@@ -223,11 +224,11 @@ public class SpentBudgetActivity extends AppCompatActivity {
 
     void addSpentTransaction(){
         SQLDatabase transactionsDB = new SQLDatabase(SpentBudgetActivity.this);
-        transactionsDB.addSpentTransactions(Integer.parseInt(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString().trim());
+        transactionsDB.addSpentTransactions(Long.parseLong(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString().trim());
     }
     String formatDateForDB(String date){
         String[] formatDate = date.split("/");
-        return formatDate[2] + "-" + formatDate[0] + "-" + formatDate[1];
+        return formatDate[2] + "-" + formatDate[1] + "-" + formatDate[0];
     }
 
 

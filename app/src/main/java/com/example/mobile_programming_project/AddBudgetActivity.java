@@ -38,6 +38,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AddBudgetActivity extends AppCompatActivity {
     private DatePickerDialog pickerDialog;
@@ -152,7 +153,7 @@ public class AddBudgetActivity extends AppCompatActivity {
     }
 
     private String MakeDateString(int day, int month, int year) {
-        return day+" / "+getMonthFormat(month)+" / "+year;
+        return String.format(Locale.getDefault(), "%02d/%02d/%d", day, month, year);
     }
 
     private String getMonthFormat(int month) {
@@ -243,7 +244,7 @@ public class AddBudgetActivity extends AppCompatActivity {
 
     void addBudgetTransaction(){
         SQLDatabase transactionsDB = new SQLDatabase(AddBudgetActivity.this);
-        transactionsDB.addBudgetTransactions(Integer.parseInt(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString()), spn.getSelectedItem().toString());
+        transactionsDB.addBudgetTransactions(Long.parseLong(editText.getText().toString()), formatDateForDB(dateBtn.getText().toString().trim()), spn.getSelectedItem().toString());
     }
 
     String formatDateForDB(String date){

@@ -10,5 +10,7 @@
         android:id="@+id/detailedCategoriesListView"
         android:layout_width="match_parent"
         android:layout_margin="10dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
         android:layout_height="match_parent" />
 </FrameLayout>

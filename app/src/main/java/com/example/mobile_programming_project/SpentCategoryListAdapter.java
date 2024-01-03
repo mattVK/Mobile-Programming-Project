@@ -18,11 +18,11 @@ import java.util.Objects;
 public class SpentCategoryListAdapter extends BaseAdapter {
 
     private Context context;
-    private int sumOfAllSpentCategories;
+    private Long sumOfAllSpentCategories;
 
     private List<String[]> dataList;
 
-    public SpentCategoryListAdapter(Context context, List<String[]> dataList, int sumOfAllCategories){
+    public SpentCategoryListAdapter(Context context, List<String[]> dataList, Long sumOfAllCategories){
         this.context = context;
         this.dataList = dataList;
         this.sumOfAllSpentCategories = sumOfAllCategories;
@@ -59,14 +59,14 @@ public class SpentCategoryListAdapter extends BaseAdapter {
         listImageView.setImageResource(getCategoryIconId(position));
         categoryTextView.setText(dataList.get(position)[0]);
         numberOfTransactionsTextView.setText(dataList.get(position)[2]);
-        int percentOfCategory;
+        Long percentOfCategory;
         if (sumOfAllSpentCategories != 0) {
-            percentOfCategory = (Integer.parseInt(dataList.get(position)[1]) * 100) / sumOfAllSpentCategories;
+            percentOfCategory = (Long.parseLong(dataList.get(position)[1]) * 100) / sumOfAllSpentCategories;
         } else {
-            percentOfCategory = 0;
+            percentOfCategory = 0L;
         }
         percentTextView.setText(String.format(Locale.getDefault(),"%d%%", percentOfCategory));
-        progressBar.setProgress((int) percentOfCategory);
+        progressBar.setProgress(Math.toIntExact(percentOfCategory));
 
         return convertView;
     }

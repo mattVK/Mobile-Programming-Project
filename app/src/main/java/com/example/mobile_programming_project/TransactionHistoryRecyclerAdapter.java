@@ -95,7 +95,7 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
         int sourceIcon = getCategoryIconId(position);
         String category = dataList.get(position).category;
         String date = dataList.get(position).date;
-        int amount = dataList.get(position).amount;
+        Long amount = dataList.get(position).amount;
 
         String symbol = Objects.equals(dataList.get(position).transactionType, "spent") ? "-" : "+";
 
@@ -139,7 +139,7 @@ public class TransactionHistoryRecyclerAdapter extends RecyclerView.Adapter<Tran
         return R.drawable.mbanking_icon;
     }
 
-    private String formatInteger(int value) {
+    private String formatInteger(Long value) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
 

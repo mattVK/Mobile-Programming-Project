@@ -98,7 +98,7 @@ public class DetailedCategoriesFragment extends Fragment {
             return temp;
         }else{
             while(cursor.moveToNext()){
-                String[] tempArray = {cursor.getString(0), String.valueOf(cursor.getInt(1)), String.valueOf(cursor.getInt(2))};
+                String[] tempArray = {cursor.getString(0), String.valueOf(cursor.getLong(1)), String.valueOf(cursor.getLong(2))};
                 temp.add(tempArray);
             }
         }

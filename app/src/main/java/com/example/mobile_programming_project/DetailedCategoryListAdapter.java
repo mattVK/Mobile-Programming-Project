@@ -74,7 +74,7 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
         iconView.setImageResource(getCategoryIconId(position));
 
 
-        float percent = ((float) Integer.parseInt(dataList.get(position)[1]) / Integer.parseInt(dataList.get(position)[2])) * 100;
+        float percent = ((float) Long.parseLong(dataList.get(position)[1]) / Long.parseLong(dataList.get(position)[2])) * 100;
 
         if (percent > 100){
             progressBar.setProgress(progressBar.getMax());
@@ -85,8 +85,8 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
 
 
         categoriesTextView.setText(dataList.get(position)[0]);
-        totalAmountTextView.setText(formatInteger(Integer.parseInt(dataList.get(position)[1])));
-        totalPercentLimitTextView.setText(formatInteger(Integer.parseInt(dataList.get(position)[2])));
+        totalAmountTextView.setText(formatInteger(Long.parseLong(dataList.get(position)[1])));
+        totalPercentLimitTextView.setText(formatInteger(Long.parseLong(dataList.get(position)[2])));
 
 
 
@@ -124,11 +124,11 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
                 if (enteredText.equals("")){
                     dialog.dismiss();
                 }else{
-                    if (Integer.parseInt(enteredText) < 0){
+                    if (Long.parseLong(enteredText) < 0){
                         dialog.dismiss();
                     }
                     else{
-                        updateLimit(position, Integer.parseInt(enteredText));
+                        updateLimit(position, Long.parseLong(enteredText));
                     }
                 }
 
@@ -149,7 +149,7 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
 
     }
 
-    void updateLimit(Integer position, Integer limitChange){
+    void updateLimit(Integer position, Long limitChange){
         dataList.set(position, new String[]{dataList.get(position)[0], dataList.get(position)[1], String.valueOf(limitChange)});
         SQLDatabase transactionsDB = new SQLDatabase(context);
         transactionsDB.updateLimitOfCategory(dataList.get(position)[0], limitChange);
@@ -177,9 +177,18 @@ public class DetailedCategoryListAdapter extends BaseAdapter {
 
 
 
+
         return numberFormat.format(value).replace(",", ".");
     }
 
+    private String formatInteger(Long value){
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+
+
+
+
+        return numberFormat.format(value).replace(",", ".");
+    }
 
 
 }

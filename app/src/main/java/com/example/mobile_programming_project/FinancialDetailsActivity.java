@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class FinancialDetailsActivity extends AppCompatActivity {
 
 
-    int sumOfSpent, sumOfBudget;
+    Long sumOfSpent, sumOfBudget;
     Button addSpentButton, addEarnedButton;
     ImageButton backButton;
 
@@ -122,11 +122,11 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         Cursor cursor = transactionsDB.getSumOfBudgetCategories();
         if (cursor.getCount() == 0) {
             earnedTextView.setText("0");
-            sumOfBudget = 0;
+            sumOfBudget = 0L;
         } else {
             while (cursor.moveToNext()) {
-                earnedTextView.setText(formatInteger(cursor.getInt(0)));
-                sumOfBudget = cursor.getInt(0);
+                earnedTextView.setText(formatInteger(cursor.getLong(0)));
+                sumOfBudget = cursor.getLong(0);
             }
         }
 
@@ -138,11 +138,11 @@ public class FinancialDetailsActivity extends AppCompatActivity {
         Cursor cursor = transactionsDB.getSumOfSpentCategories();
         if (cursor.getCount() == 0) {
             spentTextView.setText("0");
-            sumOfSpent = 0;
+            sumOfSpent = 0L;
         } else {
             while (cursor.moveToNext()) {
-                spentTextView.setText(formatInteger(cursor.getInt(0)));
-                sumOfSpent = cursor.getInt(0);
+                spentTextView.setText(formatInteger(cursor.getLong(0)));
+                sumOfSpent = cursor.getLong(0);
             }
         }
 
@@ -150,6 +150,13 @@ public class FinancialDetailsActivity extends AppCompatActivity {
 
 
     private String formatInteger(int value) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance();
+
+
+        return numberFormat.format(value).replace(",", ".");
+    }
+
+    private String formatInteger(Long value) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
 

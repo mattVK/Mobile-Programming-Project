@@ -152,7 +152,7 @@ public class TransactionHistoryFragment extends Fragment {
                 transactionList.add(new Transaction(
                         typeOfTransaction(cursor.getString(3)),
                         cursor.getInt(0),
-                        cursor.getInt(1),
+                        cursor.getLong(1),
                         cursor.getString(2),
                         cursor.getString(3)));
             }
@@ -172,7 +172,7 @@ public class TransactionHistoryFragment extends Fragment {
                 transactionList.add(new Transaction(
                         typeOfTransaction(cursor.getString(3)),
                         cursor.getInt(0),
-                        cursor.getInt(1),
+                        cursor.getLong(1),
                         cursor.getString(2),
                         cursor.getString(3)));
             }
@@ -192,7 +192,7 @@ public class TransactionHistoryFragment extends Fragment {
                 transactionList.add(new Transaction(
                         typeOfTransaction(cursor.getString(3)),
                         cursor.getInt(0),
-                        cursor.getInt(1),
+                        cursor.getLong(1),
                         cursor.getString(2),
                         cursor.getString(3)));
             }

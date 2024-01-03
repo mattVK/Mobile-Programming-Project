@@ -17,7 +17,7 @@ import java.util.Locale;
 
 class Transaction{
 
-    Transaction(String transactionType, int id, int amount, String date, String category){
+    Transaction(String transactionType, int id, Long amount, String date, String category){
         this.transactionType = transactionType;
         this.id = id;
         this.amount = amount;
@@ -26,7 +26,7 @@ class Transaction{
     }
     String transactionType;
     int id;
-    int amount;
+    Long amount;
     String date;
     String category;
     
@@ -164,7 +164,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
 
     //add budget transactions by calling this. (date format: YYYY-MM-DD)
-    void addBudgetTransactions(int amount, String date, String category){
+    void addBudgetTransactions(Long amount, String date, String category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -181,7 +181,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
     }
 
     //add spent transactions by calling this. (date format: YYYY-MM-DD)
-    void addSpentTransactions(int amount, String date, String category){
+    void addSpentTransactions(Long amount, String date, String category){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -396,7 +396,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
         return cursor;
     }
 
-    void updateLimitOfCategory(String category, Integer data){
+    void updateLimitOfCategory(String category, Long data){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();

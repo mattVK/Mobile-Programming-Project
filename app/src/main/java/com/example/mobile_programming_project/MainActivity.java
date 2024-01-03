@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
     AlarmManager alarm_manager;
 
     List<String[]> dataList;
-    int sumOfAllSpent;
+    Long sumOfAllSpent;
 
-    int sumOfAllBudget;
+    Long sumOfAllBudget;
 
     Button moreDetailsButton, viewBudgetPlanButton,btn;
     TextView spentTextView, budgetTextView, availableBalanceNumberTextView, topSpentTextView;
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             dataList.sort(new SumComparator());
 
             for (int i = 0; i < dataList.size(); i++){
-                entries.add(new PieEntry(Integer.parseInt(dataList.get(i)[1]), dataList.get(i)[0]));
+                entries.add(new PieEntry(Long.parseLong(dataList.get(i)[1]), dataList.get(i)[0]));
             }
 
             PieDataSet pieDataSet = new PieDataSet(entries, " ");
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-            topSpentTextView.setText(String.format("You spent %s on %s this month!", formatInteger(Integer.parseInt(dataList.get(0)[1])), dataList.get(0)[0]));
+            topSpentTextView.setText(String.format("You spent %s on %s this month!", formatInteger(Long.parseLong(dataList.get(0)[1])), dataList.get(0)[0]));
             Log.e("DATALIST", Arrays.toString(dataList.get(0)));
 
             SpentCategoryListAdapter adapter = new SpentCategoryListAdapter(MainActivity.this, dataList, sumOfAllSpent);
@@ -190,11 +190,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (cursor.getCount() == 0){
             spentTextView.setText("0");
-            sumOfAllSpent = 0;
+            sumOfAllSpent = 0L;
         }else{
             while(cursor.moveToNext()){
-                sumOfAllSpent = cursor.getInt(0);
-                spentTextView.setText(formatInteger(cursor.getInt(0)));
+                sumOfAllSpent = cursor.getLong(0);
+                spentTextView.setText(formatInteger(cursor.getLong(0)));
             }
         }
 
@@ -206,11 +206,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (cursor.getCount() == 0){
             budgetTextView.setText("0");
-            sumOfAllBudget = 0;
+            sumOfAllBudget = 0L;
         }else{
             while(cursor.moveToNext()){
-                sumOfAllBudget = cursor.getInt(0);
-                budgetTextView.setText(formatInteger(cursor.getInt(0)));
+                sumOfAllBudget = cursor.getLong(0);
+                budgetTextView.setText(formatInteger(cursor.getLong(0)));
             }
         }
 
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         }else{
             while(cursor.moveToNext()){
                 sumCategoriesListView.setVisibility(View.VISIBLE);
-                String[] temp = {cursor.getString(0), String.valueOf(cursor.getInt(1)), String.valueOf(cursor.getInt(2))};
+                String[] temp = {cursor.getString(0), String.valueOf(cursor.getLong(1)), String.valueOf(cursor.getLong(2))};
                 dataList.add(temp);
             }
         }
@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private String formatInteger(int value) {
+    private String formatInteger(Long value) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
 
@@ -259,8 +259,7 @@ class SumComparator implements Comparator<String[]> {
         if (Objects.equals(o1[1], o2[1])){
             return 0;
         }
-        else if (Integer.parseInt(o1[1]) > Integer.parseInt(o2[1]) ){
-            Log.e("TEST", "OI");
+        else if (Long.parseLong(o1[1]) > Long.parseLong(o2[1]) ){
             return -1;
         }
         else{
